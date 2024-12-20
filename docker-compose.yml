@@ -1,0 +1,47 @@
+version: '3.9'
+
+name: projek uasp akso naufal_nazwa
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx-server-custom
+    ports:
+      - "8081:80"
+    networks:
+      - app-network
+    volumes:
+      - nginx-config:/etc/nginx/conf.d
+      - html-data:/usr/share/nginx/html
+    depends_on:
+      - db
+
+  db:
+    image: mysql:latest
+    container_name: mysql-db-custom
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: testuser
+      MYSQL_PASSWORD: testpassword
+    ports:
+      - "3306:3306"
+    networks:
+      - app-network
+    volumes:
+      - db-data:/var/lib/mysql
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  nginx-config:
+  db-data:
+  html-data:
+
+configs:
+  nginx-config:
+    file: ./nginx.conf
+
+  
